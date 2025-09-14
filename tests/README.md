@@ -18,15 +18,28 @@ Note: Not all tests have been converted to tox and/or pytest yet.
 
 ## Running the tests
 
-Before running Vdsm tests, activate the virtual environment (which you need to
-create once, with `make venv`, as described in
-[/doc/development.md](/doc/development.md)):
+### Virtual environment setup
 
+The way you set up and activate the virtual environment depends on whether you're 
+running in a container or on your local machine:
+
+**In a (dev)container:**
+The virtual environment is automatically created at `/venv` during the container 
+build process and is automatically activated in your shell sessions. No manual setup or activation is required.
+
+**Outside a container (local development):**
+You need to create the virtual environment once with `make venv` (as described in
+[/doc/development.md](/doc/development.md)), then activate it:
+
+    make venv
     source ~/.venv/vdsm/bin/activate
 
 When done with testing, you can deactivate the virtual environment:
 
     deactivate
+
+> **Note**: The `make venv` command automatically detects if you're in a container 
+> and will skip creating a local venv if `/venv` already exists.
 
 To run tests from only one module, for example `lib`:
 
@@ -215,7 +228,7 @@ To enable slow tests:
      
     ./run_tests_local.sh --enable-slow-tests filename [...]
 
-Slow tests are also enabled if NOSE_SLOW_TESTS environment variable is set.
+Slow tests are also enabled if PYTEST_SLOW_TESTS environment variable is set.
 
 ## Enabling stress tests
 
@@ -228,39 +241,51 @@ To enable stress tests:
      
     ./run_tests_local.sh --enable-stress-tests filename [...]
 
-Stress tests are also enabled if NOSE_STRESS_TESTS environment variable is set.
+Stress tests are also enabled if PYTEST_STRESS_TESTS environment variable is set.
 
 ## Enabling threads leak check
 
 To find tests leaking threads, you can enable the thread leak checker plugin:
 
-    ./run_tests_local.sh --with-thread-leak-check filename [...]
+    ./run_tests_local.sh --enable-thread-leak-check filename [...]
+
+Or set the environment variable:
+
+    PYTEST_THREAD_LEAK_CHECK=1 ./run_tests_local.sh filename [...]
 
 To run the entire test suit with thread leak detection:
 
-    make check NOSE_WITH_THREAD_LEAK_CHECK=1
+    make check PYTEST_THREAD_LEAK_CHECK=1
 
 ## Enabling process leak check
 
 To find tests leaking child processes, you can enable the process leak checker
 plugin:
 
-    ./run_tests_local.sh --with-process-leak-check filename [...]
+    ./run_tests_local.sh --enable-process-leak-check filename [...]
+
+Or set the environment variable:
+
+    PYTEST_PROCESS_LEAK_CHECK=1 ./run_tests_local.sh filename [...]
 
 To run the entire test suit with process leak detection:
 
-    make check NOSE_WITH_PROCESS_LEAK_CHECK=1
+    make check PYTEST_PROCESS_LEAK_CHECK=1
 
 ## Enabling file leak check
 
-To find tests leaking file descriptors, you can enable the process leak checker
+To find tests leaking file descriptors, you can enable the file leak checker
 plugin:
 
-    ./run_tests_local.sh --with-file-leak-check filename [...]
+    ./run_tests_local.sh --enable-file-leak-check filename [...]
+
+Or set the environment variable:
+
+    PYTEST_FILE_LEAK_CHECK=1 ./run_tests_local.sh filename [...]
 
 To run the entire test suit with file leak detection:
 
-    make check NOSE_WITH_FILE_LEAK_CHECK=1
+    make check PYTEST_FILE_LEAK_CHECK=1
 
 ## Control verbose level
 
@@ -269,7 +294,7 @@ To run with verbose output, set verbose level to 3.
 
 To set verbose level:
     
-    make check NOSE_VERBOSE=<VERBOSE LEVEL>
+    make check PYTEST_VERBOSE=<VERBOSE LEVEL>
 
 ## Functional test suite
 

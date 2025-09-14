@@ -118,24 +118,35 @@ check-recursive:
 
 .PHONY: check-all
 check-all:
-	$(MAKE) check NOSE_STRESS_TESTS=1 NOSE_SLOW_TESTS=1
+	$(MAKE) check PYTEST_STRESS_TESTS=1 PYTEST_SLOW_TESTS=1
 
 .PHONY: check-unit
 check-unit:
-	$(MAKE) -C tests/ check NOSE_EVAL_ATTR="type=='unit'"
+	$(MAKE) -C tests/ check PYTEST_EVAL_ATTR="type=='unit'"
 
 .PHONY: lint
 lint: gitignore reuse execcmd black flake8 pylint
 
 .PHONY: venv
 venv:
-	python3 -m venv $(VENV_DIR) && \
-	$(VENV)/python3 -m pip install --upgrade pip && \
-	$(VENV)/python3 -m pip install -r docker/requirements.txt
+	@if [ -d /venv ]; then \
+		echo "Container virtual environment detected at /venv"; \
+		echo "No need to create local venv - using container's /venv instead"; \
+		echo "Packages are already installed during container build"; \
+	else \
+		echo "Creating local virtual environment at $(VENV_DIR)"; \
+		python3 -m venv --system-site-packages $(VENV_DIR) && \
+		$(VENV)/python3 -m pip install --upgrade pip && \
+		$(VENV)/python3 -m pip install -r docker/requirements.txt; \
+	fi
 
 .PHONY: tests
 tests: tox
-	tox -e "tests,lib,network,virt,gluster,hooks"
+	if [ "$(GLUSTER_MGMT)" = "1" ]; then \
+		tox -e "tests,lib,network,virt,gluster,hooks"; \
+	else \
+		tox -e "tests,lib,network,virt,hooks"; \
+	fi
 
 .PHONY: tests-storage-user
 tests-storage-user: tox
