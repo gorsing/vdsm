@@ -25,6 +25,7 @@ class LvmActivation(object):
     the close() calls lvm.deactivateLVs() to release the DM mappings
     for this volume.
     """
+
     def __init__(self, vg, lv, lockType):
         self._vg = vg
         self._lv = lv
@@ -63,6 +64,7 @@ class ImageResource(object):
     """
     Represents resource for image's volumes.
     """
+
     def __init__(self, volResourcesList):
         self.volResourcesList = volResourcesList
 

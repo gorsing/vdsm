@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 import pytest
+import time
+from vdsm.network.netinfo.cache import CachingNetInfo
 
 from vdsm.network import errors as ne
 
@@ -87,6 +89,15 @@ class TestNetworkRollback(object):
             with pytest.raises(SetupNetworksError) as e:
                 adapter.setupNetworks(NETCREATE, {}, TIMEOUT_CHK)
             assert e.value.status == ne.ERR_LOST_CONNECTION
+
+            for _ in range(20):
+                adapter.netinfo = CachingNetInfo()
+                slaves = adapter.netinfo.bondings.get(BOND_NAME, {}).get(
+                    'slaves', []
+                )
+                if nic0 in slaves:
+                    break
+                time.sleep(0.5)
 
             adapter.assertNoNetwork(NETWORK_NAME)
             adapter.assertBond(BOND_NAME, BONDCREATE[BOND_NAME])

@@ -4,7 +4,6 @@
 from __future__ import absolute_import
 from __future__ import division
 
-
 ERR_BAD_PARAMS = 21
 ERR_BAD_ADDR = 22
 ERR_BAD_NIC = 23
