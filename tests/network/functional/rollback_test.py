@@ -92,7 +92,10 @@ class TestNetworkRollback(object):
 
             for _ in range(20):
                 adapter.netinfo = CachingNetInfo()
-                slaves = adapter.netinfo.bondings.get(BOND_NAME, {}).get('slaves', [])
+                slaves = adapter.netinfo.bondings.get(
+                    BOND_NAME, {}).get(
+                    'slaves', []
+                )
                 if nic0 in slaves:
                     break
                 time.sleep(0.5)

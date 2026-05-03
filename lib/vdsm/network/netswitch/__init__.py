@@ -6,5 +6,4 @@ from __future__ import division
 
 from . import configurator
 
-
 configurator

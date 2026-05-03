@@ -229,6 +229,7 @@ class StompClient(object):
     which tells client whether it should manage reactor's
     life cycle (by default set to True).
     """
+
     def __init__(self, sock, reactor, owns_reactor=True,
                  incoming_heartbeat=DEFAULT_INCOMING,
                  outgoing_heartbeat=DEFAULT_OUTGOING,
@@ -317,6 +318,7 @@ class ClientRpcTransportAdapter(object):
     content of the message. Currently this function is
     called only from JsonRpcClient to set the callback.
     """
+
     def set_message_handler(self, handler):
         """
         Set a callback which handles messages received
