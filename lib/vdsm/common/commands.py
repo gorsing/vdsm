@@ -6,6 +6,8 @@ from __future__ import division
 
 from contextlib import contextmanager
 import logging
+import os
+import select
 import subprocess
 
 from vdsm.common import cmdutils
@@ -193,6 +195,104 @@ def wait_async(proc, event=None):
     t.start()
 
 
+_POSIX_SPAWN_HAS_CHDIR = hasattr(os, "POSIX_SPAWN_CHDIR")
+
+
+def _spawn(command, cwd=None, env=None, data=None):
+    """
+    Execute a command using posix_spawn to avoid fork() COW page-table copy.
+
+    subprocess.Popen() uses fork() which copies the parent's page tables via
+    copy-on-write. For vdsmd with ~14 GB RSS, this creates a visible RSS spike
+    in the child between fork() and execve(). os.posix_spawn() uses vfork()
+    internally, which borrows the parent's address space without copying page
+    tables, eliminating the spike entirely.
+
+    Falls back to subprocess.Popen when cwd is needed but POSIX_SPAWN_CHDIR
+    is not available (glibc < 2.29).
+
+    Returns (returncode, stdout_bytes, stderr_bytes).
+    Raises OSError if the command cannot be started.
+    """
+    if cwd is not None and not _POSIX_SPAWN_HAS_CHDIR:
+        p = subprocess.Popen(
+            command, close_fds=True, cwd=cwd, env=env,
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        with terminating(p):
+            out, err = p.communicate(data)
+        return p.returncode, out, err
+
+    stdin_r, stdin_w = os.pipe()
+    stdout_r, stdout_w = os.pipe()
+    stderr_r, stderr_w = os.pipe()
+
+    file_actions = [
+        (os.POSIX_SPAWN_CLOSE, stdin_w),
+        (os.POSIX_SPAWN_CLOSE, stdout_r),
+        (os.POSIX_SPAWN_CLOSE, stderr_r),
+        (os.POSIX_SPAWN_DUP2, stdin_r, 0),
+        (os.POSIX_SPAWN_DUP2, stdout_w, 1),
+        (os.POSIX_SPAWN_DUP2, stderr_w, 2),
+    ]
+    if _POSIX_SPAWN_HAS_CHDIR and cwd is not None:
+        file_actions.append((os.POSIX_SPAWN_CHDIR, cwd))
+
+    try:
+        pid = os.posix_spawn(
+            command[0], list(command), env,
+            file_actions=file_actions,
+        )
+    except BaseException:
+        for fd in (stdin_r, stdin_w, stdout_r, stdout_w, stderr_r, stderr_w):
+            try:
+                os.close(fd)
+            except OSError:
+                pass
+        raise
+    finally:
+        os.close(stdin_r)
+        os.close(stdout_w)
+        os.close(stderr_w)
+
+    if data:
+        written = 0
+        while written < len(data):
+            try:
+                n = os.write(stdin_w, data[written:])
+                if n == 0:
+                    break
+                written += n
+            except BrokenPipeError:
+                break
+    os.close(stdin_w)
+
+    out = b""
+    err = b""
+    fds = {stdout_r: "out", stderr_r: "err"}
+    while fds:
+        readable, _, _ = select.select(list(fds.keys()), [], [])
+        for fd in readable:
+            try:
+                chunk = os.read(fd, 65536)
+                if chunk:
+                    if fds[fd] == "out":
+                        out += chunk
+                    else:
+                        err += chunk
+                else:
+                    os.close(fd)
+                    del fds[fd]
+            except OSError:
+                os.close(fd)
+                del fds[fd]
+
+    _, status = os.waitpid(pid, 0)
+    rc = os.waitstatus_to_exitcode(status)
+
+    return rc, out, err
+
+
 @deprecated
 def execCmd(command, sudo=False, cwd=None, data=None, raw=False,
             printable=None, env=None, nice=None, ioclass=None,
@@ -216,24 +316,18 @@ def execCmd(command, sudo=False, cwd=None, data=None, raw=False,
 
     execCmdLogger.debug(command_log_line(printable, cwd=cwd))
 
-    p = subprocess.Popen(
-        command, close_fds=True, cwd=cwd, env=env,
-        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-    with terminating(p):
-        (out, err) = p.communicate(data)
+    rc, out, err = _spawn(command, cwd=cwd, env=env, data=data)
 
     if out is None:
-        # Prevent splitlines() from barfing later on
         out = b""
 
-    execCmdLogger.debug(retcode_log_line(p.returncode, err=err))
+    execCmdLogger.debug(retcode_log_line(rc, err=err))
 
     if not raw:
         out = out.splitlines(False)
         err = err.splitlines(False)
 
-    return p.returncode, out, err
+    return rc, out, err
 
 
 class PrivilegedPopen(subprocess.Popen):
