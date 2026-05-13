@@ -747,10 +747,17 @@ class SetupNetworks(object):
             status, msg = self.vdsm_proxy.setupNetworks(
                 networks, bonds, options
             )
-            if status != SUCCESS:
+        except Exception as e:
+            try:
                 self._update_configs()
-                raise SetupNetworksError(status, msg)
-        except Exception:
+            except Exception:
+                pass
+            raise SetupNetworksError(
+                None, "setupNetworks failed: {}".format(e)
+            ) from e
+
+        if status != SUCCESS:
+            self._update_configs()
             raise SetupNetworksError(status, msg)
 
         if self._is_sync_dynamic():
