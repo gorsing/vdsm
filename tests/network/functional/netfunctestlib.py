@@ -27,7 +27,6 @@ from vdsm.network.netlink import monitor
 from vdsm.network.netlink import waitfor
 from vdsm.network.restore_net_config import restore
 
-
 try:
     from functional.utils import getProxy, SUCCESS
 except ImportError:
@@ -745,11 +744,20 @@ class SetupNetworks(object):
         self.setup_bonds = bonds
 
         try:
-            status, msg = self.vdsm_proxy.setupNetworks(networks, bonds, options)
-            if status != SUCCESS:
+            status, msg = self.vdsm_proxy.setupNetworks(
+                networks, bonds, options
+            )
+        except Exception as e:
+            try:
                 self._update_configs()
-                raise SetupNetworksError(status, msg)
-        except Exception:
+            except Exception:
+                pass
+            raise SetupNetworksError(
+                None, "setupNetworks failed: {}".format(e)
+            ) from e
+
+        if status != SUCCESS:
+            self._update_configs()
             raise SetupNetworksError(status, msg)
 
         if self._is_sync_dynamic():

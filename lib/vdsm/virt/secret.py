@@ -81,7 +81,7 @@ def clear():
             if _is_ovirt_secret(virsecret):
                 virsecret.undefine()
         except libvirt.libvirtError as e:
-            logging.error("Could not unregister %s: %s", virsecret, e)
+            logging.error("Could not unregister secret: %s", e)
 
 
 def _is_ovirt_secret(virsecret):
