@@ -9,7 +9,6 @@ Log resource usage info.
 To analyze logged data, use profile-analyze tool.
 """
 
-
 import json
 import resource
 import signal

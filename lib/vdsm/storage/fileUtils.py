@@ -5,7 +5,6 @@
 NFS helper module
 """
 
-
 import errno
 import grp
 import logging

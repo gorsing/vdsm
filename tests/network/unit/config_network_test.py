@@ -2,7 +2,6 @@
 # SPDX-FileCopyrightText: Red Hat, Inc.
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-
 import pytest
 
 from vdsm.network.link.iface import DEFAULT_MTU

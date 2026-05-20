@@ -14,7 +14,6 @@ This hook can be used to force a VM to use a libvirt network that is managed
 outside of ovirt, such as an openvswitch network, or libvirt's default network.
 """
 
-
 import os
 import sys
 import traceback

@@ -5,7 +5,6 @@
 NBD - manage network block devices
 """
 
-
 import collections
 import errno
 import json

@@ -10,7 +10,6 @@
 Various storage misc procedures
 """
 
-
 import errno
 import itertools
 import logging

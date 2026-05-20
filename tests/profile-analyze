@@ -7,7 +7,6 @@
 Analyze commands profiled using profile tool.
 """
 
-
 import argparse
 import datetime
 import json

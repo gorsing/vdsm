@@ -5,7 +5,6 @@
 managevolumedb - stores connection details about managed volumes
 """
 
-
 import json
 import logging
 import os

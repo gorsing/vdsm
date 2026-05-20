@@ -9,7 +9,6 @@ Usage: logdb dbname logfile ...
 Import vdsm log files into log database dbname.
 """
 
-
 import sqlite3
 import sys
 

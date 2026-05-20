@@ -9,7 +9,6 @@ Usage: logstat logfile ...
 Show the amount of data each log call produce.
 """
 
-
 import collections
 import sys
 
