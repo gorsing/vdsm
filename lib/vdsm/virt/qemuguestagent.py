@@ -1,9 +1,6 @@
 # SPDX-FileCopyrightText: Red Hat, Inc.
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-from __future__ import absolute_import
-from __future__ import division
-
 from collections import defaultdict
 import copy
 import ipaddress
@@ -142,6 +139,7 @@ def channel_state_to_str(state):
 @virdomain.expose("guestInfo", "interfaceAddresses", "guestVcpus")
 class QemuGuestAgentDomain(object):
     """Wrapper object exposing libvirt API."""
+
     def __init__(self, vm):
         self._vm = vm
 

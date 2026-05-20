@@ -1,9 +1,6 @@
 # SPDX-FileCopyrightText: Red Hat, Inc.
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-from __future__ import absolute_import
-from __future__ import division
-
 import io
 import logging
 import time
@@ -27,6 +24,7 @@ class NullResourceFactory(rm.SimpleResourceFactory):
     """
     A resource factory that has no resources. Used for testing.
     """
+
     def resourceExists(self, name):
         return False
 
@@ -35,6 +33,7 @@ class ErrorResourceFactory(rm.SimpleResourceFactory):
     """
     A resource factory that has no resources. Used for testing.
     """
+
     def createResource(self, name, lockType):
         raise Exception("EPIC FAIL!! LOLZ!!")
 

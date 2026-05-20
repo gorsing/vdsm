@@ -1,9 +1,6 @@
 # SPDX-FileCopyrightText: Red Hat, Inc.
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-from __future__ import absolute_import
-from __future__ import division
-
 import io
 import collections
 import enum
@@ -104,6 +101,7 @@ class DomainAdapter(object):
     VM wrapper class that exposes only
     libvirt migration related operations.
     """
+
     def __init__(self, vm):
         self._vm = vm
 

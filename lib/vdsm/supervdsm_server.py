@@ -1,8 +1,6 @@
 # SPDX-FileCopyrightText: Red Hat, Inc.
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-from __future__ import absolute_import
-
 import argparse
 import atexit
 import errno
@@ -90,6 +88,7 @@ class PopenAdapter:
     Adapt multiprocessing.Process() to subprocess.Popen() interface so it can
     be used with commands.wait_async().
     """
+
     def __init__(self, proc):
         self._proc = proc
 

@@ -745,7 +745,9 @@ class SetupNetworks(object):
         self.setup_bonds = bonds
 
         try:
-            status, msg = self.vdsm_proxy.setupNetworks(networks, bonds, options)
+            status, msg = self.vdsm_proxy.setupNetworks(
+                networks, bonds, options
+            )
             if status != SUCCESS:
                 self._update_configs()
                 raise SetupNetworksError(status, msg)
