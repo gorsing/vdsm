@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: Red Hat, Inc.
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-
 from vdsm.common import response
 from vdsm.common.define import doneCode
 from vdsm.common.define import errCode

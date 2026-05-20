@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: Red Hat, Inc.
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-
 from vdsm.common import validate
 from vdsm.common import xmlutils
 from vdsm.common.hostdev import detach_detachable, reattach_detachable, \
