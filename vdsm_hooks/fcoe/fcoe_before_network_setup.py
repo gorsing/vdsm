@@ -11,7 +11,6 @@ syntax:
    fcoe = true|false
 """
 
-
 import os
 import shlex
 import traceback

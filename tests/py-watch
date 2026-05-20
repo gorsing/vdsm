@@ -10,7 +10,6 @@ Usage:
     py-watch TIMEOUT command args
 """
 
-
 import os
 import sys
 import signal

@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: Red Hat, Inc.
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-
 from vdsm import virtsparsify
 from vdsm.common.exception import VdsmException
 from vdsm.storage import guarded

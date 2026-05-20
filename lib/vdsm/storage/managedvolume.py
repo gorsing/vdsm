@@ -10,7 +10,6 @@ This module provides needed interfaces to for attaching and detaching volumes:
     - detach_volume() - detach a volume according to the device info provided
 """
 
-
 import functools
 import json
 import logging

@@ -5,7 +5,6 @@
 sysfs - helper for accessing sysfs attributes.
 """
 
-
 import errno
 import io
 from vdsm.common import password

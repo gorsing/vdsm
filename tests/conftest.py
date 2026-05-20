@@ -5,7 +5,6 @@
 Common fixtures that can be used without importing anything.
 """
 
-
 import pytest
 
 

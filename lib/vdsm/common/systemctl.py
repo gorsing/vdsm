@@ -5,7 +5,6 @@
 systemctl - wrapper for systemctl command.
 """
 
-
 import os
 
 from . import commands

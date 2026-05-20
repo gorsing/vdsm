@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: Red Hat, Inc.
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-
 from . import expose
 
 from vdsm.network.api import (setSafeNetworkConfig, setupNetworks,

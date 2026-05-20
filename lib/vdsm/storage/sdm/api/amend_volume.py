@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: Red Hat, Inc.
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-
 from vdsm.common import errors
 from vdsm.storage import constants as sc
 from vdsm.storage import guarded

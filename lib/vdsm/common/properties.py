@@ -65,7 +65,6 @@ as property, so the attribute exists, returning None:
 
 """
 
-
 import base64
 import uuid
 

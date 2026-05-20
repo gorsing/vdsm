@@ -3,7 +3,6 @@
 # SPDX-FileCopyrightText: Red Hat, Inc.
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-
 '''
 Hook to enable disk UNMAP(TRIM) for disk devices.
 

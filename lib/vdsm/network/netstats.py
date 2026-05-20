@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: Red Hat, Inc.
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-
 from time import time as current_time_since_epoch
 
 from vdsm.network.link import stats as link_stats

@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: Red Hat, Inc.
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-
 from vdsm.network.link import bond
 from vdsm.network.link import iface
 from vdsm.network.link import nic

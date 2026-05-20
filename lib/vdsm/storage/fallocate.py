@@ -5,7 +5,6 @@
 fallocate wrapping module
 """
 
-
 import sys
 from vdsm.storage import operation
 
