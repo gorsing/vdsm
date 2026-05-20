@@ -22,7 +22,6 @@ To setup the environment for unprivileged user:
           --disable-network
 """
 
-
 import logging
 import os
 import stat

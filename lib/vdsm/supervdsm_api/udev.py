@@ -10,7 +10,6 @@ Example for Managed Block Storage paths that are handled:
 # /dev/nvme0n3
 """
 
-
 import os
 import errno
 import glob

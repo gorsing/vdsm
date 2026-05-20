@@ -74,7 +74,6 @@ Make sure port 8000 is accessible on the manager node.
 
 """
 
-
 import argparse
 import collections
 import datetime

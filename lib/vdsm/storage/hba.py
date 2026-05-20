@@ -5,7 +5,6 @@
 Collect HBA information
 """
 
-
 import glob
 import logging
 import os

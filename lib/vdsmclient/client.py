@@ -114,7 +114,6 @@ Use the --host/-a option to connect to the target host:
 
 """
 
-
 import argparse
 import json
 import os

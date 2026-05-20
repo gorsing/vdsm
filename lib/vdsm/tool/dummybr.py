@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: Red Hat, Inc.
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-
 import os
 
 from libvirt import libvirtError, VIR_ERR_NO_NETWORK
