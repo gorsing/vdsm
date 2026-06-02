@@ -3,7 +3,6 @@
 #
 # pylint: disable=no-member
 
-
 import collections
 import os
 import threading

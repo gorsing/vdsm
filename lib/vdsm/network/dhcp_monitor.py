@@ -9,6 +9,7 @@ from vdsm.common import concurrent
 from vdsm.network.netlink import monitor
 from vdsm.network.ip.address import IPAddressData
 
+
 _monitor_instance = None
 _monitor_lock = threading.Lock()
 

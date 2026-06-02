@@ -12,6 +12,7 @@ from . import netfunctestlib as nftestlib
 from network.nettestlib import dummy_device
 from network.nettestlib import running_on_ovirt_ci
 
+
 NETWORK_NAME = 'test-network'
 
 

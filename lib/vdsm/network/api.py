@@ -27,6 +27,7 @@ from . import canonicalize
 from .errors import RollbackIncomplete
 from . import netconfpersistence
 
+
 DUMMY_BRIDGE
 
 
